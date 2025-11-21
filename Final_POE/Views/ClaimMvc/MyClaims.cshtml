@@ -1,0 +1,44 @@
+﻿@model IEnumerable<Final_POE.Models.Claims> 
+
+@{ ViewData["Title"] = "My Claims"; }
+
+@* F4: Display the lecturer whose claims are being shown *@
+<h1 class="text-3xl font-bold text-gray-800">My Claims for @ViewData["LecturerEmail"]</h1>
+
+@if (Model.Any())
+{
+    <table class="min-w-full mt-4 bg-white shadow-md rounded">
+        <thead>
+            <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                <th class="py-3 px-6 text-left">Claim Title</th>
+                <th class="py-3 px-6 text-center">Hours Claimed</th>
+                <th class="py-3 px-6 text-center">Final Payment</th>
+                <th class="py-3 px-6 text-center">Status</th>
+                <th class="py-3 px-6 text-center">Submission Date</th>
+            </tr>
+        </thead>
+        <tbody class="text-gray-600 text-sm font-light">
+            @foreach (var claim in Model)
+            {
+                <tr class="border-b border-gray-200 hover:bg-gray-100">
+                    <td class="py-3 px-6 text-left whitespace-nowrap">@claim.ClaimTitle</td>
+                    <td class="py-3 px-6 text-center">@claim.HoursClaimed</td>
+                    <td class="py-3 px-6 text-center">R@claim.FinalPaymentAmount.ToString("N2")</td>
+                    
+                    @* Display status with conditional styling *@
+                    <td class="py-3 px-6 text-center">
+                        <span class="p-1 rounded-full @(claim.Status == Final_POE.Models.ClaimStatus.Approved ? "bg-green-200 text-green-600" : 
+                                                    (claim.Status == Final_POE.Models.ClaimStatus.Rejected ? "bg-red-200 text-red-600" : "bg-yellow-200 text-yellow-600"))">
+                            @claim.Status
+                        </span>
+                    </td>
+                    <td class="py-3 px-6 text-center">@claim.SubmissionDate.ToShortDateString()</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p class="mt-4 p-4 bg-yellow-100 text-yellow-700 rounded">You haven't submitted any claims yet.</p>
+}

@@ -1,0 +1,14 @@
+﻿@model decimal 
+
+@{ ViewData["Title"] = "Approved Payroll Report"; }
+
+<h1 class="text-3xl font-bold text-gray-800">Approved Payroll Report (HR View)</h1>
+
+<p class="text-lg mt-4">
+    This report summarizes all hours from claims with the Approved status, calculated automatically by the system.
+</p>
+
+<div class="p-6 bg-green-100 border-l-4 border-green-500 text-green-700 mt-6">
+    <h2 class="text-xl font-semibold">Total Approved Hours for Payroll:</h2>
+    <p class="text-4xl mt-2 font-extrabold">@Model hours</p> @* P3: Display the calculated total *@
+</div>

@@ -1,0 +1,42 @@
+﻿@model IEnumerable<Final_POE.Models.Claims>
+@{ ViewData["Title"] = "Verification Queue"; }
+
+<h1 class="text-3xl font-bold text-gray-800">Verification Queue</h1>
+
+@if (Model.Any())
+{
+    @foreach (var claim in Model) @* Loop through each claim *@
+    {
+        @* Separate form for each claim to handle decision *@
+        <form method="post" asp-controller="ClaimMvc" asp-action="ProcessDecision" class="claim-card p-4 my-2 border rounded shadow-sm">
+            
+            @* Pass the specific claim ID *@
+            <input type="hidden" name="claimId" value="@claim.ClaimId" />
+
+            <div class="claim-info">
+                <p class="font-semibold text-lg">@claim.ClaimTitle</p>
+                <p class="text-sm text-gray-600">
+                    Lecturer: @claim.LecturerEmail | Hours: @claim.HoursClaimed | Total: R@claim.FinalPaymentAmount
+                </p>
+                @* F2: Display High-Priority Flag *@
+                @if (claim.RequiresManagerFlag)
+                {
+                    <span class="text-xs font-bold text-red-700 bg-red-100 p-1 rounded">High Priority Review (Over 160 hrs)</span>
+                }
+            </div>
+
+            <div class="claim-actions flex items-center space-x-2 mt-2">
+                @* Dropdown to select status, maps to 'status' parameter in controller *@
+                <select name="status" class="p-2 border rounded">
+                    <option value="@Final_POE.Models.ClaimStatus.Approved">Approve</option>
+                    <option value="@Final_POE.Models.ClaimStatus.Rejected">Reject</option>
+                </select>
+                <button type="submit" class="btn-primary">Process</button>
+            </div>
+        </form>
+    }
+}
+else
+{
+    <p class="mt-4 p-4 bg-yellow-100 text-yellow-700 rounded">The verification queue is empty.</p>
+}

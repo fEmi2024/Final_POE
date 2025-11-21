@@ -1,0 +1,54 @@
+﻿@model Final_POE.Models.Claims 
+
+@{
+    ViewData["Title"] = "Submit a Claim";
+}
+
+<h1 class="text-3xl font-bold text-gray-800">Submit a Claim</h1>
+
+<form method="post" class="space-y-6 mt-4">
+    @Html.AntiForgeryToken() @* 2. Security Token *@
+
+    @* Input Field for LecturerEmail *@
+    <div class="form-group">
+        <label for="LecturerEmail" class="form-label">Lecturer Email</label>
+        <input type="email" class="input-field" id="LecturerEmail" name="LecturerEmail" required value="@Model.LecturerEmail" />
+        @Html.ValidationMessageFor(model => model.LecturerEmail) @* F3: Client-side validation message *@
+    </div>
+
+    @* Input Field for HoursClaimed *@
+    <div class="form-group">
+        <label for="HoursClaimed" class="form-label">Hours Claimed</label>
+        <input type="number" class="input-field" id="HoursClaimed" name="HoursClaimed" min="0.1" max="400" step="0.01" required value="@Model.HoursClaimed" />
+        @Html.ValidationMessageFor(model => model.HoursClaimed) 
+    </div>
+
+    @* Input Field for HourlyRate (F1) *@
+    <div class="form-group">
+        <label for="HourlyRate" class="form-label">Hourly Rate (R)</label>
+        <input type="number" class="input-field" id="HourlyRate" name="HourlyRate" min="50" max="1000" step="0.01" required value="@Model.HourlyRate" />
+    </div>
+
+    @* Display for Estimated Payment *@
+    <div class="form-group">
+        <label for="FinalPaymentDisplay" class="form-label">Estimated Payment</label>
+        <input type="text" class="input-field" id="FinalPaymentDisplay" readonly value="R 0.00" />
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn-action">Submit Claim</button>
+    </div>
+</form>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    // F1: JavaScript/jQuery function for instantaneous calculation
+    function calculatePayment() {
+        var hours = parseFloat($('#HoursClaimed').val()) || 0;
+        var rate = parseFloat($('#HourlyRate').val()) || 0;
+        var total = hours * rate;
+        $('#FinalPaymentDisplay').val('R ' + total.toFixed(2));
+    }
+    $('#HoursClaimed, #HourlyRate').on('input', calculatePayment);
+    $(document).ready(calculatePayment);
+</script>
